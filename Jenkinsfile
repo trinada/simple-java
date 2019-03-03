@@ -1,25 +1,34 @@
 pipeline {
     agent any 
+    tools {
+        jdk 'JAVA'
+        maven 'MAVEN'
+    }
+
     stages {
         stage('clone-repo') {
          
             steps {
                 
-                bat 'git clone https://github.com/trinada/simple-java.git'
-                bat 'mvn clean -f simple-java '
+                sh 'git clone https://github.com/trinada/simple-java.git'
+                sh 'mvn clean -f simple-java '
             }
         }
-        stage(' Test') {
+        stage('Test') {
              
             steps {
-                bat 'mvn test -f simple-java'
+                sh 'mvn test -f simple-java'
                 echo 'test completed'
             }
+        } 
+        stage('Build'){
+           steps{
+               sh 'mvn install package -f simple-java'
+               echo "build completed"
+           }
+    
             
         }
-        
-        
-        
     }
     
-}
+    }
